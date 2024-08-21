@@ -1,0 +1,2 @@
+  <a class="btn btn-xs btn-warning" href="{{ url('hospitals/outdoors/appointments?patient_id='.optional($appointment->patient)->id) }}">
+                                                    <i class="fa fa-history" title="Appointment History"></i></a>
