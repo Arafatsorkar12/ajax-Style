@@ -123,3 +123,46 @@ blade->
                               <tbody>
                               </tbody>
                             </table>
+
+
+
+<===========================================>
+ document.getElementById('customer').addEventListener('change', function () {
+            var customerId = this.value;
+            // console.log( customerId);
+            if (customerId) {
+                fetch('/dokani/get-customer-balance/' + customerId)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Fetched Data:', data);
+                        $('#previous_due').val(data.balance);
+                        calculatePayable()
+                    })
+                    .catch(error => {
+                        console.error('Fetch Error:', error);
+                    });
+            } else {
+                $('#previous_due').val('');
+                console.log('No customer selected, clearing balance.');
+            }
+        });
+
+
+  <select id="customer"
+                                        class="form-control chosen-select-100-percent"
+                                        data-placeholder="--Select Customer--" required>
+                                    <option></option>
+                                    @foreach ($customers as $customer)
+                                        <option value="{{ $customer->id }}"
+                                                data-pre_due="{{ $customer->balance }}"
+                                                data-point = "{{ $customer->point }}"
+                                            {{ $customer->is_default == 1 ? 'selected' : '' }}>
+                                            {{ $customer->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
